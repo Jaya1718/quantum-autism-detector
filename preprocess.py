@@ -1,30 +1,26 @@
 import os
-import cv2
 import numpy as np
-from sklearn.model_selection import train_test_split
+from PIL import Image
 from sklearn.preprocessing import LabelEncoder
 
-IMG_SIZE = 64
-
-def load_data(data_dir):
+def load_images(dataset_path, img_size=(64, 64), max_images_per_class=100):
     X, y = [], []
-    for label in os.listdir(data_dir):
-        path = os.path.join(data_dir, label)
-        for img in os.listdir(path):
-            img_path = os.path.join(path, img)
-            try:
-                image = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
-                image = cv2.resize(image, (IMG_SIZE, IMG_SIZE))
-                X.append(image)
-                y.append(label)
-            except Exception as e:
-                continue
-    return np.array(X), np.array(y)
+    labels = os.listdir(dataset_path)
 
-def preprocess_data(data_dir):
-    X, y = load_data(data_dir)
-    X = X / 255.0
-    X = X.reshape((X.shape[0], IMG_SIZE * IMG_SIZE))
-    le = LabelEncoder()
-    y = le.fit_transform(y)
-    return train_test_split(X, y, test_size=0.2, random_state=42), le
+    for label in labels:
+        class_dir = os.path.join(dataset_path, label)
+        count = 0
+        for img_file in os.listdir(class_dir):
+            if img_file.endswith(('.jpg', '.png', '.jpeg')):
+                img_path = os.path.join(class_dir, img_file)
+                img = Image.open(img_path).convert('L')  # grayscale
+                img = img.resize(img_size)
+                X.append(np.array(img).flatten() / 255.0)
+                y.append(label)
+                count += 1
+                if count >= max_images_per_class:
+                    break
+
+    X = np.array(X)
+    y = LabelEncoder().fit_transform(y)
+    return X, y
