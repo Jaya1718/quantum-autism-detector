@@ -53,20 +53,10 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🧠 Quantum Autism Detector</h1>
-        <form action="/predict" method="POST" enctype="multipart/form-data">
-            <input type="file" name="mri_image" accept="image/*" required><br>
-            <button type="submit">Upload & Predict</button>
-        </form>
-
-        {% if image_path %}
-            <img src="{{ image_path }}" alt="Uploaded MRI Image">
-        {% endif %}
-
-        {% if result %}
-            <div class="result">Result: {{ result }}</div>
-        {% endif %}
-    </div>
+    <body>
+    <h1>🧠 Alzheimer’s Detection with Quantum ML</h1>
+    <form method="POST" action="/train">
+        <button type="submit">Train Quantum Model</button>
+    </form>
 </body>
 </html>
