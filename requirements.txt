@@ -1,8 +1,7 @@
 flask
 numpy
-opencv-python
-scikit-learn
 matplotlib
-qiskit==0.39.4
-qiskit-machine-learning==0.5.0
-qiskit-aer==0.11.2
+pillow
+scikit-learn
+qiskit
+qiskit-machine-learning
