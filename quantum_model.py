@@ -1,22 +1,28 @@
-from qiskit.circuit.library import ZZFeatureMap, RealAmplitudes
 from qiskit_machine_learning.algorithms import VQC
+from qiskit.circuit.library import ZZFeatureMap, RealAmplitudes
 from qiskit.algorithms.optimizers import COBYLA
 from qiskit.utils import QuantumInstance
-from qiskit_aer import Aer
+from qiskit.providers.aer import AerSimulator
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.metrics import accuracy_score
+from preprocess import load_images
 
-def build_quantum_model(X_train, y_train, X_test, y_test):
-    feature_map = ZZFeatureMap(feature_dimension=X_train.shape[1], reps=1)
-    ansatz = RealAmplitudes(num_qubits=X_train.shape[1], reps=1)
-    optimizer = COBYLA(maxiter=100)
+def train_quantum_model(dataset_path):
+    X, y = load_images(dataset_path)
+    X = StandardScaler().fit_transform(X)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    backend = Aer.get_backend('aer_simulator')
-    qi = QuantumInstance(backend)
+    feature_map = ZZFeatureMap(feature_dimension=X.shape[1], reps=1)
+    ansatz = RealAmplitudes(num_qubits=X.shape[1], reps=1)
 
+    quantum_instance = QuantumInstance(backend=AerSimulator())
     vqc = VQC(feature_map=feature_map,
               ansatz=ansatz,
-              optimizer=optimizer,
-              quantum_instance=qi)
-    
+              optimizer=COBYLA(maxiter=50),
+              quantum_instance=quantum_instance)
+
     vqc.fit(X_train, y_train)
-    score = vqc.score(X_test, y_test)
-    return vqc, score
+    y_pred = vqc.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    return accuracy
