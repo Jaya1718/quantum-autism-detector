@@ -1,62 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Quantum Autism Detector</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f0f4f8;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-        .container {
-            max-width: 600px;
-            margin: 80px auto;
-            background-color: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-        h1 {
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        input[type="file"] {
-            padding: 10px;
-            margin-bottom: 20px;
-            font-size: 16px;
-        }
-        button {
-            background-color: #007bff;
-            border: none;
-            color: white;
-            padding: 12px 24px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 8px;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .result {
-            margin-top: 30px;
-            font-size: 20px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        img {
-            margin-top: 20px;
-            max-width: 100%;
-            border-radius: 10px;
-        }
-    </style>
+  <title>Alzheimer Quantum Classifier</title>
+  <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-    <body>
-    <h1>🧠 Alzheimer’s Detection with Quantum ML</h1>
-    <form method="POST" action="/train">
-        <button type="submit">Train Quantum Model</button>
+  <div class="container">
+    <h1>🧠 Alzheimer’s Detection using Quantum ML</h1>
+    <form method="POST" action="/run_model">
+      <button type="submit">Train Quantum Model</button>
     </form>
+    {% if accuracy %}
+    <p>Model Accuracy: <strong>{{ accuracy }}%</strong></p>
+    {% endif %}
+  </div>
 </body>
 </html>
