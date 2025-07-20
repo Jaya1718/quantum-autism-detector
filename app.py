@@ -1,18 +1,16 @@
 from flask import Flask, render_template, request
-from preprocess import preprocess_data
-from quantum_model import build_quantum_model
+from quantum_model import train_quantum_model
 
 app = Flask(__name__)
 
 @app.route('/')
-def index():
+def home():
     return render_template('index.html')
 
-@app.route('/train', methods=['POST'])
-def train():
-    (X_train, X_test, y_train, y_test), _ = preprocess_data("AlzheimerDataset")
-    model, acc = build_quantum_model(X_train, y_train, X_test, y_test)
-    return f"Quantum model trained. Accuracy: {acc * 100:.2f}%"
+@app.route('/run_model', methods=['POST'])
+def run_model():
+    accuracy = train_quantum_model("AlzheimerDataset")
+    return render_template("index.html", accuracy=round(accuracy * 100, 2))
 
 if __name__ == '__main__':
     app.run(debug=True)
